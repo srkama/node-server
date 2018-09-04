@@ -8,6 +8,7 @@ const StringDecoder = require('string_decoder').StringDecoder
 const fs = require('fs');
 
 const config = require('./config');
+const handleRoute = require('./route');
 
 //Handles all the request for 
 const CommonServer = (req, res) => {
@@ -30,10 +31,11 @@ const CommonServer = (req, res) => {
             payload: buffer
         }
 
-        console.log(data);
-        res.writeHead(200)
-        
-        res.end("Hello world!");
+        response  = handleRoute(data);
+        console.log(response);
+        res.setHeader('Content-Type', 'application/json');
+        res.writeHead(response.statusCode)
+        res.end(JSON.stringify(response.data));
     });
 }
 
@@ -47,3 +49,4 @@ const httpsOptions  = {
 
 const httpsServer = https.createServer(httpsOptions, CommonServer)
 httpsServer.listen(config.https.port, () => {console.log("https server listening in" + config.https.port)})
+
