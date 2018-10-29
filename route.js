@@ -1,32 +1,17 @@
-const home = (data) => {
-    return {
-        statusCode: 200,
-        data: "This from home"
-    }
-}
-
-const hello = (data) => {
-    const name = data.queryParams['name'] ? data.queryParams['name'] : 'Node Js'
-    return {
-        statusCode: 200,
-        data: 'hello ' + name 
-    }
-}
+const handlers = require("./lib/handlers");
 
 const route = {
-    '': home,
-    '/hello': hello,
-    defaultHandler: home
-}
+	"": handlers.home,
+	"/hello": handlers.hello,
+	"/users": handlers.users,
+	"/login": handlers.login,
+	"/logout": handlers.logout,
+	defaultHandler: handlers.home
+};
 
-const handleRoute = (data) => {
-    var handler = route[data.path] ? route[data.path] : route.defaultHandler
-    return handler(data)
-}
+const handleRoute = (data, callback) => {
+	var handler = route[data.path] ? route[data.path] : route.defaultHandler;
+	handler(data, callback);
+};
 
-
-
-
-module.exports = handleRoute
-
-
+module.exports = handleRoute;
